@@ -7,8 +7,8 @@
     "test": "karma start",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "postinstall": "typings install",
-    "prepare": "cp -a electron/. dist",
-    "electron": "prepare && electron dist",
+    "prepare": "copy electron dist",
+    "electron": "npm run prepare && electron dist",
     "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js dist App --platform=darwin --arch=all --out=app --overwrite"
   },
   "licenses": [
@@ -33,6 +33,7 @@
   "devDependencies": {
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.2.4",
+    "copy": "^0.3.0",
     "css-loader": "^0.23.1",
     "electron": "^1.4.1",
     "electron-packager": "^8.1.0",
