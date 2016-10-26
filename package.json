@@ -6,11 +6,14 @@
     "start": "webpack-dev-server --inline --progress --port 8080",
     "test": "karma start",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "build:dev": "webpack --progress --profile --bail --watch",
     "postinstall": "typings install",
-    "prepare": "copy electron dist",
-    "electron": "npm run prepare && electron dist",
-    "package": "npm run build && npm run prepare && electron-packager dist App --platform=darwin --arch=all --out=app --overwrite",
-    "package:windows": "npm run build && npm run prepare && electron-packager dist App --platform=win32 --arch=all --out=app --overwrite"
+    "electron:prepare": "ncp electron dist",
+    "electron": "npm run electron:prepare && electron dist",
+    "electron:dev": "nodemon --watch ./electron --exec \"npm run electron:prepare\"",
+    "package": "npm run build && npm run electron:prepare && electron-packager dist App --platform=darwin --arch=all --out=app --overwrite",
+    "package:windows": "npm run build && npm run electron:prepare && electron-packager dist App --platform=win32 --arch=all --out=app --overwrite",
+    "dev": "concurrently \"npm run electron\" \"npm run electron:dev\" \"npm run build:dev\""
   },
   "licenses": [
     {
@@ -34,10 +37,11 @@
   "devDependencies": {
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.2.4",
-    "copy": "^0.3.0",
+    "concurrently": "^3.1.0",
     "css-loader": "^0.23.1",
     "electron": "^1.4.1",
     "electron-packager": "^8.1.0",
+    "electron-reload": "^1.0.2",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.3",
@@ -48,7 +52,9 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.8.0",
+    "ncp": "^2.0.0",
     "node-sass": "^3.10.1",
+    "nodemon": "^1.11.0",
     "null-loader": "^0.1.1",
     "phantomjs-prebuilt": "^2.1.7",
     "raw-loader": "^0.5.1",
